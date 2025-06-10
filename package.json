@@ -1,0 +1,13 @@
+{
+  "name": "vapi-agent-website",
+  "version": "1.0.0",
+  "description": "Vapi AI Agent website with secure environment variables.",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js",
+    "start": "serve public"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}

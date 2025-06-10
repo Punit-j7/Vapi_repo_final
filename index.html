@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Talk to Agent</title>
+</head>
+<body>
+  <h1>TALK TO AGENT</h1>
+  <script>
+  var vapiInstance = null;
+  const buttonConfig = {}; // Modify this as required
+
+  (async function () {
+    try {
+      // Fetch Vapi configuration from your API route
+      const response = await fetch('/api/getVapiConfig');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const config = await response.json();
+
+      // Ensure apiKey and assistant are available
+      if (!config.apiKey || !config.assistant) {
+        throw new Error("Missing Vapi API Key or Assistant ID from backend.");
+      }
+
+      // Vapi SDK loading logic
+      (function (d, t) {
+        var g = document.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src =
+          "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+
+        g.onload = function () {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: config.apiKey,       // Use fetched API key
+            assistant: config.assistant, // Use fetched Assistant ID
+            config: buttonConfig,        // optional
+          });
+        };
+      })(document, "script");
+
+    } catch (error) {
+      console.error("Failed to load Vapi configuration:", error);
+      // Display a user-friendly message if there's an error
+      document.body.innerHTML = '<h1>Error loading agent. Please try again later.</h1>';
+    }
+  })();
+  </script>
+
+</body>
+</html>
